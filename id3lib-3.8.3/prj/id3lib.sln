@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "id3lib", "id3lib.vcxproj", "{99E31767-064C-4C08-855E-E42DDF99EF1C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "..\zlib\prj\zlib.vcxproj", "{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		NASM Debug|Win32 = NASM Debug|Win32
+		NASM Release|Win32 = NASM Release|Win32
+		Release|Win32 = Release|Win32
+		Template|Win32 = Template|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Debug|Win32.Build.0 = Debug|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.NASM Debug|Win32.ActiveCfg = Debug|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.NASM Debug|Win32.Build.0 = Debug|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.NASM Release|Win32.ActiveCfg = Release|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.NASM Release|Win32.Build.0 = Release|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Release|Win32.ActiveCfg = Release|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Release|Win32.Build.0 = Release|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Template|Win32.ActiveCfg = Release|Win32
+		{99E31767-064C-4C08-855E-E42DDF99EF1C}.Template|Win32.Build.0 = Release|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Debug|Win32.Build.0 = Debug|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.NASM Debug|Win32.ActiveCfg = NASM Debug|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.NASM Debug|Win32.Build.0 = NASM Debug|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.NASM Release|Win32.ActiveCfg = NASM Release|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.NASM Release|Win32.Build.0 = NASM Release|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Release|Win32.ActiveCfg = Release|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Release|Win32.Build.0 = Release|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Template|Win32.ActiveCfg = Template|Win32
+		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}.Template|Win32.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

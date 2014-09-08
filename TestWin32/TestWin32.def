@@ -1,0 +1,6 @@
+; TestWin32.def : DLL のモジュール パラメータを宣言します。
+
+LIBRARY      "TestWin32"
+
+EXPORTS
+    ; 明示的なエクスポートはここへ記述できます

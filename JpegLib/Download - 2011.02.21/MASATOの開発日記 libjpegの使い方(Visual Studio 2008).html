@@ -1,0 +1,220 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0049)http://www.sutosoft.com/room/archives/000492.html -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>MASATOの開発日記: libjpegの使い方(Visual Studio 2008)</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8"><LINK 
+href="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/styles-site.css" 
+type=text/css rel=stylesheet><LINK title=RSS 
+href="http://www.sutosoft.com/room/index.rdf" type=application/rss+xml 
+rel=alternate><LINK title=Home href="http://www.sutosoft.com/room/" 
+rel=start><LINK title="Visual Studio 2008を買ってみました。" 
+href="http://www.sutosoft.com/room/archives/000491.html" rel=prev><LINK 
+title="libjpeg高速化改造版の使い方(Visual Studio 2008)" 
+href="http://www.sutosoft.com/room/archives/000493.html" rel=next>
+<SCRIPT language=javascript type=text/javascript>
+<!--
+
+function OpenTrackback (c) {
+    window.open(c,
+                    'trackback',
+                    'width=480,height=480,scrollbars=yes,status=yes');
+}
+
+var HOST = 'www.sutosoft.com';
+
+// Copyright (c) 1996-1997 Athenia Associates.
+// http://www.webreference.com/js/
+// License is granted if and only if this entire
+// copyright notice is included. By Tomer Shiran.
+
+function setCookie (name, value, expires, path, domain, secure) {
+    var curCookie = name + "=" + escape(value) + ((expires) ? "; expires=" + expires.toGMTString() : "") + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + ((secure) ? "; secure" : "");
+    document.cookie = curCookie;
+}
+
+function getCookie (name) {
+    var prefix = name + '=';
+    var c = document.cookie;
+    var nullstring = '';
+    var cookieStartIndex = c.indexOf(prefix);
+    if (cookieStartIndex == -1)
+        return nullstring;
+    var cookieEndIndex = c.indexOf(";", cookieStartIndex + prefix.length);
+    if (cookieEndIndex == -1)
+        cookieEndIndex = c.length;
+    return unescape(c.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+function deleteCookie (name, path, domain) {
+    if (getCookie(name))
+        document.cookie = name + "=" + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+}
+
+function fixDate (date) {
+    var base = new Date(0);
+    var skew = base.getTime();
+    if (skew > 0)
+        date.setTime(date.getTime() - skew);
+}
+
+function rememberMe (f) {
+    var now = new Date();
+    fixDate(now);
+    now.setTime(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+    setCookie('mtcmtauth', f.author.value, now, '', HOST, '');
+    setCookie('mtcmtmail', f.email.value, now, '', HOST, '');
+    setCookie('mtcmthome', f.url.value, now, '', HOST, '');
+}
+
+function forgetMe (f) {
+    deleteCookie('mtcmtmail', '', HOST);
+    deleteCookie('mtcmthome', '', HOST);
+    deleteCookie('mtcmtauth', '', HOST);
+    f.email.value = '';
+    f.author.value = '';
+    f.url.value = '';
+}
+
+//-->
+</SCRIPT>
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://www.sutosoft.com/room/archives/000492.html"
+    trackback:ping="http://www.sutosoft.com/cgi-bin/mt/mt-tb.cgi/490"
+    dc:title="libjpegの使い方(Visual Studio 2008)"
+    dc:identifier="http://www.sutosoft.com/room/archives/000492.html"
+    dc:subject="技術メモ"
+    dc:description="IJGが配布しているIJG JPEG library(libjpeg、jpeglib、jpeg-6bと呼ばれることもあるようです)をVisual Studio 2008で使う方法を調べましたので、まとめておきます。 "
+    dc:creator="MASATO"
+    dc:date="2008-02-17T00:47:43+09:00" />
+</rdf:RDF>
+-->
+<META content="MSHTML 6.00.2900.6058" name=GENERATOR></HEAD>
+<BODY>
+<DIV id=banner>
+<H1><A accessKey=1 
+href="http://www.sutosoft.com/room/">MASATOの開発日記</A></H1><SPAN 
+class=description>ソフト開発のTipsや自作ソフトウェアのリリース案内。</SPAN> </DIV>
+<DIV id=counter>
+<SCRIPT language=JavaScript>
+<!--
+　　/* efStat from YugenKoubou (http://www.skipup.com/~fuka/) */
+　　buf = escape(parent.document.referrer);
+　　ref = "";
+　　for (i = 0; i < buf.length; i++) {
+　　　　str = buf.charAt(i);
+　　　　ref += (str == "+") ? "%2B" : str;
+　　}
+　　scr = screen.width+","+screen.height+","+screen.colorDepth;
+
+　　document.write('<span class="count">2004/05/09からの総計<a href="http://yugen.main.jp/"><img src="/cgi-bin/fstat/fcount.cgi?LOG=000492&MODE=a&DIGIT=5&REF=',ref,'&SCR=',scr,'" width="60" height="16" border="0" alt="総アクセス数" /></a></span>');
+　　document.write('<span class="count">今日<a href="http://yugen.main.jp/"><img src="/cgi-bin/fstat/fcount.cgi?LOG=000492&MODE=t&DIGIT=5&REF=',ref,'&SCR=',scr,'" width="60" height="16" border="0" alt="今日のアクセス数" /></a></span>');
+　　document.write('<span class="count">昨日<a href="http://yugen.main.jp/"><img src="/cgi-bin/fstat/fcount.cgi?LOG=000492&MODE=y&DIGIT=5&REF=',ref,'&SCR=',scr,'" width="60" height="16" border="0" alt="昨日のアクセス数" /></a></span>');
+// -->
+</SCRIPT>
+<NOSCRIPT><SPAN class=count>2004/05/09からの総計<A href="http://yugen.main.jp/"><IMG 
+height=16 alt=総アクセス数 
+src="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/fcount.gif" width=60 
+border=0></A></SPAN> <SPAN class=count>今日<A href="http://yugen.main.jp/"><IMG 
+height=16 alt=今日のアクセス数 
+src="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/fcount.gif" width=60 
+border=0></A></SPAN> <SPAN class=count>昨日<A href="http://yugen.main.jp/"><IMG 
+height=16 alt=昨日のアクセス数 
+src="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/fcount.gif" width=60 
+border=0></A></SPAN> </NOSCRIPT></DIV>
+<DIV id=container>
+<DIV class=blog>
+<DIV id=menu><A href="http://www.sutosoft.com/room/archives/000491.html">« 
+Visual Studio 2008を買ってみました。</A> | <A 
+href="http://www.sutosoft.com/room/">メイン</A> | <A 
+href="http://www.sutosoft.com/room/archives/000493.html">libjpeg高速化改造版の使い方(Visual 
+Studio 2008) »</A> </DIV></DIV>
+<DIV class=blog>
+<H2 class=date>2008年02月17日</H2>
+<DIV class=blogbody>
+<H3 class=title>libjpegの使い方(Visual Studio 2008)</H3>
+<P><A href="http://www.ijg.org/">IJG</A>が配布しているIJG JPEG 
+library(libjpeg、jpeglib、jpeg-6bと呼ばれることもあるようです)をVisual Studio 
+2008で使う方法を調べましたので、まとめておきます。 <BR>(<A 
+href="http://www.sutosoft.com/room/archives/000435.html">Visual C++.NET 
+2003の場合はこちら</A>) </P><A name=more></A>
+<P>必要なもの </P>
+<UL>
+  <LI>Visual Studio 2008(Visual C++ 9.0) 
+  <LI>IJG JPEG library ソースコード(jpegsrc.v6b.tar.gz)。<A 
+  href="http://www.ijg.org/">IJG</A>からダウンロード可能 
+  <LI>プロジェクトファイル(libjpeg.vcproj)。<A 
+  href="http://www.sutosoft.com/room/archives/products/20080217_libjpeg.lzh">ダウンロードはこちら</A> 
+  </LI></UL>
+<P>手順 </P>
+<OL>
+  <LI>libjpeg.vcprojをjpeglib.hと同じ場所に置きます。 
+  <LI>libjpeg.vcprojを開いて全構成をビルドします。lib-vc90フォルダ以下にC++ランタイム毎の4種類のlibファイルが作成されます。 
+  </LI></OL>
+<P>Visual C++.NET 
+2003はC++ランタイムが6種類あったのですが、2008ではシングルスレッド用のランタイムがなくなり、4種類になったようです。 </P>
+<P>libjpegの機能は、jpeglib.hを#includeすると使えるようになります。<BR>このとき、標準的なヘッダ(windows.hなど)と干渉を起こすことがありますが、以下のように書くと回避できます。 
+<PRE>#define XMD_H
+#undef FAR
+extern "C" {
+#include &lt;jpeglib.h&gt;
+}</PRE>
+<P></P>
+<P>以上です。 </P><SPAN class=posted>投稿者 MASATO : 2008年02月17日 00:47 | <A 
+onclick="OpenTrackback(this.href); return false" 
+href="http://www.sutosoft.com/cgi-bin/mt/mt-tb.cgi?__mode=view&amp;entry_id=492">トラックバック</A> 
+<BR></SPAN></DIV>
+<DIV id=advertisement>
+<SCRIPT type=text/javascript><!--
+  amazon_ad_tag = "wwwsutosoftco-22";
+  amazon_ad_width = "468";
+  amazon_ad_height = "60";
+  amazon_ad_logo = "hide";
+  amazon_ad_price = "retail";
+//--></SCRIPT>
+
+<SCRIPT src="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/ads.js" 
+type=text/javascript></SCRIPT>
+</DIV>
+<DIV class=comments-head><A name=comments></A>コメント</DIV>
+<DIV class=comments-head>コメントする</DIV>
+<DIV class=comments-body>
+<FORM name=comments_form 
+onsubmit="if (this.bakecookie[0].checked) rememberMe(this)" 
+action=http://www.sutosoft.com/cgi-bin/mt/mt-comments.cgi method=post><INPUT 
+type=hidden value=byebye name=spammer> <INPUT type=hidden value=1 name=static> 
+<INPUT type=hidden value=492 name=entry_id> <!--div style="width:180px; padding-right:15px; margin-right:15px; float:left; text-align:left; border-right:1px dotted #bbb;"--><LABEL 
+for=author>名前:</LABEL><BR><INPUT id=author tabIndex=1 name=author><BR><BR><LABEL 
+for=email>メールアドレス</LABEL><BR><INPUT id=email tabIndex=2 
+name=email><BR><BR><LABEL for=url>URL:</LABEL><BR><INPUT id=url tabIndex=3 
+name=url><BR><BR><!--/div-->名前、アドレスを登録しますか?<BR><INPUT id=bakecookie type=radio 
+name=bakecookie><LABEL for=bakecookie>Yes</LABEL><INPUT id=forget 
+style="MARGIN-LEFT: 15px" onclick=forgetMe(this.form) type=radio 
+value="Forget Info" name=bakecookie><LABEL for=forget>No</LABEL><BR 
+style="CLEAR: both"><LABEL for=text>コメント:</LABEL><BR><TEXTAREA id=text tabIndex=4 name=text rows=10 cols=80></TEXTAREA><BR><BR><INPUT type=submit value=&nbsp;確認&nbsp; name=preview> 
+<INPUT style="FONT-WEIGHT: bold" type=submit value=&nbsp;投稿&nbsp; name=post><BR><BR></FORM>
+<SCRIPT language=javascript type=text/javascript>
+<!--
+document.comments_form.email.value = getCookie("mtcmtmail");
+document.comments_form.author.value = getCookie("mtcmtauth");
+document.comments_form.url.value = getCookie("mtcmthome");
+if (getCookie("mtcmtauth")) {
+    document.comments_form.bakecookie[0].checked = true;
+} else {
+    document.comments_form.bakecookie[1].checked = true;
+}
+//-->
+</SCRIPT>
+</DIV></DIV></DIV>
+<SCRIPT src="MASATOの開発日記 libjpegの使い方(Visual Studio 2008).files/urchin.js" 
+type=text/javascript>
+</SCRIPT>
+
+<SCRIPT 
+type=text/javascript>
+_uacct = "UA-1852445-2";
+urchinTracker();
+</SCRIPT>
+</BODY></HTML>
