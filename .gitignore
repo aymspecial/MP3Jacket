@@ -8,3 +8,6 @@ obj
 bin
 *.sdf
 *.suo
+*.user
+*.aps
+.gitignore
