@@ -56,6 +56,7 @@
       <AdditionalIncludeDirectories>..\id3lib-3.8.3\include;..\JpegLib\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <ProgramDataBaseFileName>D:\Wbin\MP3Jacket\MP3Jacket\bin\Debug\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -63,6 +64,9 @@
       <AdditionalDependencies>..\id3lib-3.8.3\libprj\id3libD.lib;..\JpegLib\lib\libjpegmdd.lib;..\id3lib-3.8.3\zlib\zlibD.lib</AdditionalDependencies>
       <OutputFile>..\MP3Jacket\bin\Debug\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

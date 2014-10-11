@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Web;
 using System.Reflection; // Assembly
 using System.Resources;
+using SHDocVw;
 
 namespace MP3Jacket {
 /// <summary>
@@ -416,6 +417,7 @@ public partial class Form1 : Form
 
 	private void panelJacket_Click( object sender, EventArgs e )
 	{
+
 		// 何も選ばれていなければNoImageで終わる
 		if( listBoxMp3.SelectedIndex == -1 )
 		{
@@ -429,19 +431,15 @@ public partial class Form1 : Form
 		// ファイル名から検索名を抜き出す
 		string sSearchKey = getArtistName( sMp3File );
 
-		// "&" はそこで検索語句が切られてしまう
+		// "&" ではそこで検索語句が切られてしまう
 		sSearchKey = sSearchKey.Replace( "&", "and" );
 
-		string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
-		System.Diagnostics.Process.Start( "IExplore", "-framemerging " + encUrl );
-		//System.Diagnostics.Process.Start( "chrome", encUrl );
 
-		//if( ie == null )
-		//{
-		//	ie = new SHDocVw.InternetExplorer();
-		//}
-		//ie.Visible = true;
-		//ie.Navigate( encUrl );
+
+		string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
+
+		openNewTabPage( encUrl );
+
     }
 
 	private string getArtistName( string mp3Name )
@@ -584,6 +582,24 @@ public partial class Form1 : Form
 
 	private void bResize_Click( object sender, EventArgs e )
 	{
+	}
+
+	private void openNewTabPage( string url )
+	{
+		ShellWindows m_IEFoundBrowsers = new ShellWindowsClass();
+
+		foreach( InternetExplorer browser in m_IEFoundBrowsers )
+		{
+			string processName 
+				 = System.IO.Path.GetFileNameWithoutExtension( browser.FullName ).ToLower();
+			if( processName.Equals( "iexplore" ) )
+			{
+				browser.Navigate( url, null, "JacketSearch" );
+				return;
+			}
+		}
+		// ここまで来ちゃったら開いてるIEが無いのでIEを起動する
+		System.Diagnostics.Process.Start( "IExplore", url );
 
 	}
 } // end of Form1 class
