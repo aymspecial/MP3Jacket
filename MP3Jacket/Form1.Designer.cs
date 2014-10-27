@@ -41,14 +41,15 @@
 			// listBoxMp3
 			// 
 			this.listBoxMp3.AllowDrop = true;
-			this.listBoxMp3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.listBoxMp3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.listBoxMp3.FormattingEnabled = true;
 			this.listBoxMp3.HorizontalScrollbar = true;
 			this.listBoxMp3.ItemHeight = 12;
-			this.listBoxMp3.Location = new System.Drawing.Point(8, 12);
+			this.listBoxMp3.Location = new System.Drawing.Point(212, 4);
 			this.listBoxMp3.Name = "listBoxMp3";
-			this.listBoxMp3.Size = new System.Drawing.Size(219, 376);
+			this.listBoxMp3.Size = new System.Drawing.Size(214, 352);
 			this.listBoxMp3.TabIndex = 8;
 			this.listBoxMp3.SelectedIndexChanged += new System.EventHandler(this.listBoxMp3_SelectedIndexChanged);
 			this.listBoxMp3.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxMp3_DragDrop);
@@ -59,7 +60,7 @@
 			// 
 			this.panelJacket.AllowDrop = true;
 			this.panelJacket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelJacket.Location = new System.Drawing.Point(237, 12);
+			this.panelJacket.Location = new System.Drawing.Point(6, 4);
 			this.panelJacket.Name = "panelJacket";
 			this.panelJacket.Size = new System.Drawing.Size(200, 200);
 			this.panelJacket.TabIndex = 9;
@@ -70,18 +71,18 @@
 			// 
 			// AllClear
 			// 
-			this.AllClear.Location = new System.Drawing.Point(237, 227);
+			this.AllClear.Location = new System.Drawing.Point(6, 219);
 			this.AllClear.Name = "AllClear";
 			this.AllClear.Size = new System.Drawing.Size(75, 23);
 			this.AllClear.TabIndex = 10;
-			this.AllClear.Text = "AllClear";
+			this.AllClear.Text = "ListClear";
 			this.AllClear.UseVisualStyleBackColor = true;
 			this.AllClear.Click += new System.EventHandler(this.AllClear_Click);
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(249, 319);
+			this.label1.Location = new System.Drawing.Point(15, 286);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(189, 48);
 			this.label1.TabIndex = 11;
@@ -89,7 +90,7 @@
 			// 
 			// buttonRebuild
 			// 
-			this.buttonRebuild.Location = new System.Drawing.Point(237, 256);
+			this.buttonRebuild.Location = new System.Drawing.Point(6, 248);
 			this.buttonRebuild.Name = "buttonRebuild";
 			this.buttonRebuild.Size = new System.Drawing.Size(75, 23);
 			this.buttonRebuild.TabIndex = 12;
@@ -99,7 +100,7 @@
 			// 
 			// bImageEdit
 			// 
-			this.bImageEdit.Location = new System.Drawing.Point(362, 227);
+			this.bImageEdit.Location = new System.Drawing.Point(131, 219);
 			this.bImageEdit.Name = "bImageEdit";
 			this.bImageEdit.Size = new System.Drawing.Size(75, 23);
 			this.bImageEdit.TabIndex = 10;
@@ -109,7 +110,7 @@
 			// 
 			// bResize
 			// 
-			this.bResize.Location = new System.Drawing.Point(362, 256);
+			this.bResize.Location = new System.Drawing.Point(131, 248);
 			this.bResize.Name = "bResize";
 			this.bResize.Size = new System.Drawing.Size(75, 23);
 			this.bResize.TabIndex = 10;
@@ -122,7 +123,7 @@
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(462, 397);
+			this.ClientSize = new System.Drawing.Size(428, 358);
 			this.Controls.Add(this.buttonRebuild);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.bResize);
