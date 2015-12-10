@@ -52,13 +52,13 @@ namespace MP3Jacket
 			panelJacket.Invalidate();
 		}
 
-		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode )]
+		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl )]
 		extern static void TestSub( string sMp3File, string sJpegFile );
 
-		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode )]
+		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl )]
 		extern static void JacketFromMp3( string sMp3File, string sJpegFile );
 
-		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode )]
+		[DllImport( "TestWin32.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl )]
 		extern static void BmpFileToJpegFile( string sBmpFile, string sJpegFile );
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace MP3Jacket
 				if( File.Exists( dropname ) && Path.GetExtension( dropname ) == ".mp3" )
 				{
 					arrayMp3.Add( dropname );
-					listBoxMp3.Items.Add( Path.GetFileName( dropname ) );
+//					listBoxMp3.Items.Add( Path.GetFileName( dropname ) );
 				}
 				if( Directory.Exists( dropname ) )
 				{
@@ -104,9 +104,15 @@ namespace MP3Jacket
 					foreach( string fname in files )
 					{
 						arrayMp3.Add( fname );
-						listBoxMp3.Items.Add( Path.GetFileName( fname ) );
+//						listBoxMp3.Items.Add( Path.GetFileName( fname ) );
 					}
 				}
+			}
+			arrayMp3.Sort();
+			listBoxMp3.Items.Clear();
+			foreach( string fname in arrayMp3 )
+			{
+				listBoxMp3.Items.Add( Path.GetFileName( fname ) );
 			}
 		}
 
