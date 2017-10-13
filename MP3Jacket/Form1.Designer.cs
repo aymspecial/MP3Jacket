@@ -152,6 +152,6 @@
         private System.Windows.Forms.Button buttonRebuild;
 		private System.Windows.Forms.Button bImageEdit;
 		private System.Windows.Forms.Button bResize;
-    }
+	}
 }
 

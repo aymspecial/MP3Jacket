@@ -49,7 +49,7 @@
 
 // CTestWin32App
 
-BEGIN_MESSAGE_MAP(CTestWin32App, CWinApp)
+BEGIN_MESSAGE_MAP( CTestWin32App, CWinApp )
 END_MESSAGE_MAP()
 
 
@@ -99,11 +99,10 @@ void JacketFromMp3( LPCWSTR lpMp3File, LPCWSTR lpJpegFile )
 		}
 	}
 	catch( std::exception & ex )
-    {
-        std::cerr << "Exception occurred: " << ex.what() << std::endl;
+	{
+		std::cerr << "Exception occurred: " << ex.what() << std::endl;
 	}
 }
-
 
 void TestSub( LPCWSTR lpMp3File, LPCWSTR lpJpegFile )
 {
@@ -117,7 +116,7 @@ void TestSub( LPCWSTR lpMp3File, LPCWSTR lpJpegFile )
 	WideCharToMultiByte( CP_ACP, 0, lpJpegFile, -1, strJpegFile, nLen, NULL, NULL );
 
 	ID3_Tag tag;
-  
+
 	tag.Link( strMp3File );
 
 	ID3_Frame *lpTagFrame = tag.Find( ID3FID_PICTURE );
@@ -126,14 +125,14 @@ void TestSub( LPCWSTR lpMp3File, LPCWSTR lpJpegFile )
 		tag.RemoveFrame( lpTagFrame );
 	}
 	ID3_Frame frame;
-	frame.SetID(ID3FID_PICTURE);
-	frame.GetField(ID3FN_MIMETYPE)->Set("image/jpeg");
-	frame.GetField(ID3FN_DATA)->FromFile( strJpegFile );
-	tag.AddFrame(frame);
-  
-	tag.SetPadding(false);
-	tag.SetUnsync(false);
-	tag.Update(ID3TT_ID3V2);
+	frame.SetID( ID3FID_PICTURE );
+	frame.GetField( ID3FN_MIMETYPE )->Set( "image/jpeg" );
+	frame.GetField( ID3FN_DATA )->FromFile( strJpegFile );
+	tag.AddFrame( frame );
+
+	tag.SetPadding( false );
+	tag.SetUnsync( false );
+	tag.Update( ID3TT_ID3V2 );
 }
 
 void BmpFileToJpegFile( LPCWSTR lpBmpFile, LPCWSTR lpJpegFile )
@@ -141,7 +140,6 @@ void BmpFileToJpegFile( LPCWSTR lpBmpFile, LPCWSTR lpJpegFile )
 	LoadBMP( CString( lpBmpFile ) );
 	SaveJPG( CString( lpJpegFile ), TRUE );
 }
-
 
 BYTE *m_buf;
 UINT m_width;
@@ -188,13 +186,12 @@ void LoadBMP( CString fileName )
 
 	m_buf = theBmpFile.LoadBMP( fileName, &m_width, &m_height );
 
-	if( ( m_buf == NULL ) || ( theBmpFile.m_errorText != "OK" ) ) 
+	if( ( m_buf == NULL ) || ( theBmpFile.m_errorText != "OK" ) )
 	{
 		AfxMessageBox( theBmpFile.m_errorText );
 		m_buf = NULL;
 		return;
 	}
-
 }
 
 void Concat( LPCWSTR fileName1, LPCWSTR fileName2, LPCWSTR outFile )
@@ -207,11 +204,11 @@ void Concat( LPCWSTR fileName1, LPCWSTR fileName2, LPCWSTR outFile )
 
 	ifstream fin1( fileName1, ios::in | ios::binary );
 	ifstream fin2( fileName2, ios::in | ios::binary );
-	
+
 	// èoóÕóp
-    ofstream fout( outFile, ios::out | ios::binary | ios::trunc );
+	ofstream fout( outFile, ios::out | ios::binary | ios::trunc );
 	int outSize = statInfo1.st_size + statInfo2.st_size;
-    char* buf = new char[ outSize ];
+	char* buf = new char[ outSize ];
 
 	fin1.read( buf, statInfo1.st_size );
 	fin2.read( buf + statInfo1.st_size, statInfo2.st_size );
@@ -223,6 +220,5 @@ void Concat( LPCWSTR fileName1, LPCWSTR fileName2, LPCWSTR outFile )
 	fin1.close();
 	fin2.close();
 
-	delete [] buf;
+	delete[] buf;
 }
- 

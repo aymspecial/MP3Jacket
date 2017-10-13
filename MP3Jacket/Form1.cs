@@ -1,18 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Web;
+using System.Drawing;
+using System.IO;
 using System.Reflection; // Assembly
 using System.Resources;
+using System.Runtime.InteropServices;
+using System.Web;
+using System.Windows.Forms;
 using SHDocVw;
 
 namespace MP3Jacket
@@ -440,8 +435,6 @@ namespace MP3Jacket
 
 			// "&" ではそこで検索語句が切られてしまう
 			sSearchKey = sSearchKey.Replace( "&", "and" );
-
-
 
 			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
 
