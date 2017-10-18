@@ -609,5 +609,10 @@ namespace MP3Jacket
 			System.Diagnostics.Process.Start( "IExplore", url );
 
 		}
+
+		private void fileToolStripMenuItem_Click( object sender, EventArgs e )
+		{
+
+		}
 	} // end of Form1 class
 } // End of namespace MP3Jacket
