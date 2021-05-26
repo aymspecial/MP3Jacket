@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Jacket", "MP3Jacket\MP3Jacket.csproj", "{E985DB52-5F15-4DCE-ABA2-ABD92CA540D2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2} = {BFF04D3E-5EF2-415D-8FD7-3D3BD7D4F4E2}
-		{2F9AF1E8-A489-DEA8-5FC0-5FB92418AE33} = {2F9AF1E8-A489-DEA8-5FC0-5FB92418AE33}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "id3lib", "id3lib-3.8.3\libprj\id3lib.vcxproj", "{2F9AF1E8-A489-DEA8-5FC0-5FB92418AE33}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -483,5 +479,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8CC497A-6DA3-4D86-880D-344CF0AC496E}
 	EndGlobalSection
 EndGlobal

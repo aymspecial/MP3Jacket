@@ -246,20 +246,87 @@ namespace MP3Jacket
 				return;
 			}
 
-			string[] a = e.Data.GetFormats();
-
-			if( e.Data.GetDataPresent( DataFormats.Bitmap ) )
+			// ドロップされたデータがFileDrop型か調べる
+			if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
 			{
+				////ドロップされたデータがstring型か調べる
+				//if( !e.Data.GetDataPresent( DataFormats.FileDrop ) )
+				//{
+				//	return;
+				//}
+
+				//ドロップされたデータ(string型)を取得
+				string[] itemText = (string[])e.Data.GetData( DataFormats.FileDrop );
+
+				// これだとクローズされずにロックされたままとなり、
+				// 手動で画像ファイルを消去しようとしても explorer から怒られる
+				//				Bitmap bm = (Bitmap)Image.FromFile( itemText[ 0 ] );
+
+				// ↑の理由により FileStream オブジェクトを使用し、画像を読み込む
+				System.IO.FileStream fs = new System.IO.FileStream( itemText[ 0 ],
+					  System.IO.FileMode.Open, System.IO.FileAccess.Read );
+				Bitmap bm = (Bitmap)Image.FromStream( fs );
+				fs.Close();
+
+				bm = resizeBitmapTo1024( bm );
+
+				string sTempBmp = Path.GetTempFileName();
+				sTempBmp = Path.GetDirectoryName( sTempBmp ) + "\\" + Path.GetFileNameWithoutExtension( sTempBmp ) + ".bmp";
+
+				// fs.Close() してしまったために保存できないんだとさ、そのための回避策
+				bm = new Bitmap( bm );
+				bm.Save( sTempBmp, System.Drawing.Imaging.ImageFormat.Bmp );
+				string sTempJpeg = Path.GetTempFileName();
+				sTempJpeg = Path.GetDirectoryName( sTempJpeg ) + "\\" + Path.GetFileNameWithoutExtension( sTempJpeg ) + ".jpg";
+
+				BmpFileToJpegFile( sTempBmp, sTempJpeg );
+
+				string sMp3File = null;
+				foreach( int i in listBoxMp3.SelectedIndices )
+				{
+					sMp3File = arrayMp3[ i ] as string;
+					try
+					{
+						TestSub( sMp3File, sTempJpeg );
+					}
+					catch( Exception ex )
+					{
+						Debug.WriteLine( ex.Message );
+					}
+				}
+
+				// 最後だけ選ばれている状態にする
+				listBoxMp3.SelectedIndex = listBoxMp3.SelectedIndices[ listBoxMp3.SelectedIndices.Count - 1 ];
+
+				entryJacket( sMp3File );
+
+				try
+				{
+					File.Delete( sTempJpeg );
+					File.Delete( sTempBmp );
+				}
+				catch( Exception ex )
+				{
+					Debug.WriteLine( ex.Message );
+				}
+
 				return;
 			}
-			if( e.Data.GetDataPresent( DataFormats.CommaSeparatedValue ) )
+			if( e.Data.GetDataPresent( DataFormats.Html ) )
 			{
+				//ドロップされたデータ(string型)を取得
+				string itemText = (string)e.Data.GetData( DataFormats.Html );
+				MessageBox.Show( "HTML ファイルはドロップできません", "エラー",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information,
+					MessageBoxDefaultButton.Button1,
+					MessageBoxOptions.DefaultDesktopOnly );
 				return;
 			}
 			if( e.Data.GetDataPresent( DataFormats.Dib ) )
 			{
 				Bitmap bm = DibToImage.Convert( e.Data.GetData( DataFormats.Dib ) );
-				bm = resizeBitmapTo512( bm );
+				bm = resizeBitmapTo1024( bm );
 
 				string sTempBmp = Path.GetTempFileName();
 				sTempBmp = Path.GetDirectoryName( sTempBmp ) + "\\" + Path.GetFileNameWithoutExtension( sTempBmp ) + ".bmp";
@@ -270,29 +337,36 @@ namespace MP3Jacket
 
 				BmpFileToJpegFile( sTempBmp, sTempJpeg );
 
-				string sMp3File = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
 
-				try
+				string sMp3File = null;
+				foreach( int i in listBoxMp3.SelectedIndices )
 				{
-					TestSub( sMp3File, sTempJpeg );
-					File.Delete( sTempJpeg );
-					File.Delete( sTempBmp );
+					sMp3File = arrayMp3[ i ] as string;
+					try
+					{
+						TestSub( sMp3File, sTempJpeg );
+						File.Delete( sTempJpeg );
+						File.Delete( sTempBmp );
+					}
+					catch( Exception ex )
+					{
+						Debug.WriteLine( ex.Message );
+					}
+				}
 
-				}
-				catch( Exception ex )
-				{
-					Debug.WriteLine( ex.Message );
-				}
+				// 最後だけ選ばれている状態にする
+				listBoxMp3.SelectedIndex = listBoxMp3.SelectedIndices[ listBoxMp3.SelectedIndices.Count - 1 ];
 
 				entryJacket( sMp3File );
 
 				return;
 			}
-			//////////
-			//ドロップされたデータがFileDrop型か調べる
-			if( e.Data.GetDataPresent( DataFormats.Html ) )
+			if( e.Data.GetDataPresent( DataFormats.Bitmap ) )
 			{
-				MessageBox.Show( "HTML ファイルはドロップできません", "エラー" );
+				return;
+			}
+			if( e.Data.GetDataPresent( DataFormats.CommaSeparatedValue ) )
+			{
 				return;
 			}
 			if( e.Data.GetDataPresent( DataFormats.EnhancedMetafile ) )
@@ -343,61 +417,22 @@ namespace MP3Jacket
 			{
 				return;
 			}
-			if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
-			{
-				//ドロップされたデータがstring型か調べる
-				if( !e.Data.GetDataPresent( DataFormats.FileDrop ) )
-				{
-					return;
-				}
-
-				//ドロップされたデータ(string型)を取得
-				string[] itemText = (string[])e.Data.GetData( DataFormats.FileDrop );
-
-				Bitmap bm = (Bitmap)Image.FromFile( itemText[ 0 ] );
-				bm = resizeBitmapTo512( bm );
-
-				string sTempBmp = Path.GetTempFileName();
-				sTempBmp = Path.GetDirectoryName( sTempBmp ) + "\\" + Path.GetFileNameWithoutExtension( sTempBmp ) + ".bmp";
-				bm.Save( sTempBmp, System.Drawing.Imaging.ImageFormat.Bmp );
-				string sTempJpeg = Path.GetTempFileName();
-				sTempJpeg = Path.GetDirectoryName( sTempJpeg ) + "\\" + Path.GetFileNameWithoutExtension( sTempJpeg ) + ".jpg";
-
-				BmpFileToJpegFile( sTempBmp, sTempJpeg );
-
-				string sMp3File = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
-
-				try
-				{
-					TestSub( sMp3File, sTempJpeg );
-					File.Delete( sTempJpeg );
-					File.Delete( sTempBmp );
-				}
-				catch( Exception ex )
-				{
-					Debug.WriteLine( ex.Message );
-				}
-
-				entryJacket( sMp3File );
-
-				return;
-			}
 		}
 
-		private Bitmap resizeBitmapTo512( Bitmap src )
+		private Bitmap resizeBitmapTo1024( Bitmap src )
 		{
 			Bitmap dst;
 			double scale;
 
-			if( 512 < src.Width || 512 < src.Height )
+			if( 1024 < src.Width || 1024 < src.Height )
 			{
 				if( src.Width < src.Height )
 				{
-					scale = 512.0 / src.Height;
+					scale = 1024.0 / src.Height;
 				}
 				else
 				{
-					scale = 512.0 / src.Width;
+					scale = 1024.0 / src.Width;
 				}
 			}
 			else
@@ -419,7 +454,6 @@ namespace MP3Jacket
 
 		private void panelJacket_Click( object sender, EventArgs e )
 		{
-
 			// 何も選ばれていなければNoImageで終わる
 			if( listBoxMp3.SelectedIndex == -1 )
 			{
@@ -436,10 +470,10 @@ namespace MP3Jacket
 			// "&" ではそこで検索語句が切られてしまう
 			sSearchKey = sSearchKey.Replace( "&", "and" );
 
-			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
+//			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
+			string encUrl = "https://search.yahoo.co.jp/image/search?ei=UTF-8&fr=sfp_as&aq=-1&oq=&ts=1688&p=" + HttpUtility.UrlEncode( sSearchKey ) + "&meta=vc%3D";
 
 			openNewTabPage( encUrl );
-
 		}
 
 		private string getArtistName( string mp3Name )
@@ -482,7 +516,12 @@ namespace MP3Jacket
 		{
 			// フルパスを取ってくる
 			string sMp3File  = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
-			System.Diagnostics.Process.Start( sMp3File );
+
+			// mp3 ファイルをテンポラリフォルダにコピーして再生
+			string playFile = Path.GetTempPath() + Path.GetFileName( sMp3File );
+			File.Copy( sMp3File, playFile, true );
+
+			System.Diagnostics.Process.Start( playFile );
 		}
 
 		/// <summary>
@@ -589,25 +628,49 @@ namespace MP3Jacket
 
 		private void bResize_Click( object sender, EventArgs e )
 		{
+			var fbd = new FolderBrowserDialog();
+			if( fbd.ShowDialog( this ) == DialogResult.OK )
+			{
+				var listFiles = Directory.GetFiles( fbd.SelectedPath, "*.mp3", System.IO.SearchOption.TopDirectoryOnly );
+				foreach( string dropname in listFiles )
+				{
+					if( File.Exists( dropname ) && Path.GetExtension( dropname ) == ".mp3" )
+					{
+						arrayMp3.Add( dropname );
+						//					listBoxMp3.Items.Add( Path.GetFileName( dropname ) );
+					}
+				}
+				arrayMp3.Sort();
+				listBoxMp3.Items.Clear();
+				foreach( string fname in arrayMp3 )
+				{
+					listBoxMp3.Items.Add( Path.GetFileName( fname ) );
+				}
+			}
 		}
 
 		private void openNewTabPage( string url )
 		{
-			ShellWindows m_IEFoundBrowsers = new ShellWindowsClass();
+			//ShellWindows m_IEFoundBrowsers = new ShellWindowsClass();
 
-			foreach( InternetExplorer browser in m_IEFoundBrowsers )
-			{
-				string processName 
-				 = System.IO.Path.GetFileNameWithoutExtension( browser.FullName ).ToLower();
-				if( processName.Equals( "iexplore" ) )
-				{
-					browser.Navigate( url, null, "JacketSearch" );
-					return;
-				}
-			}
-			// ここまで来ちゃったら開いてるIEが無いのでIEを起動する
-			System.Diagnostics.Process.Start( "IExplore", url );
+			//foreach( InternetExplorer browser in m_IEFoundBrowsers )
+			//{
+			//	string processName 
+			//	 = System.IO.Path.GetFileNameWithoutExtension( browser.FullName ).ToLower();
+			//	if( processName.Equals( "iexplore" ) )
+			//	{
+			//		browser.Navigate( url, null, "JacketSearch" );
+			//		return;
+			//	}
+			//}
+			//// ここまで来ちゃったら開いてるIEが無いのでIEを起動する
+			////			System.Diagnostics.Process.Start( "IExplore", url );
 
+			var chromePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
+			var p = Process.Start( chromePath, url );
+
+
+			System.Diagnostics.Process.Start( url );
 		}
 
 		private void fileToolStripMenuItem_Click( object sender, EventArgs e )
