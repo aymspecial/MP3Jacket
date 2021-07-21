@@ -3,12 +3,14 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Reflection; // Assembly
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Web;
+using System.Web.Hosting;
 using System.Windows.Forms;
-using SHDocVw;
 
 namespace MP3Jacket
 {
@@ -79,8 +81,6 @@ namespace MP3Jacket
 				return;
 			}
 
-			ListBox target = (ListBox)sender;
-
 			//ドロップされたデータ(string型)を取得
 			string[] itemText = (string[])e.Data.GetData( DataFormats.FileDrop );
 
@@ -91,7 +91,7 @@ namespace MP3Jacket
 				if( File.Exists( dropname ) && Path.GetExtension( dropname ) == ".mp3" )
 				{
 					arrayMp3.Add( dropname );
-//					listBoxMp3.Items.Add( Path.GetFileName( dropname ) );
+					//					listBoxMp3.Items.Add( Path.GetFileName( dropname ) );
 				}
 				if( Directory.Exists( dropname ) )
 				{
@@ -99,7 +99,7 @@ namespace MP3Jacket
 					foreach( string fname in files )
 					{
 						arrayMp3.Add( fname );
-//						listBoxMp3.Items.Add( Path.GetFileName( fname ) );
+						//						listBoxMp3.Items.Add( Path.GetFileName( fname ) );
 					}
 				}
 			}
@@ -126,7 +126,7 @@ namespace MP3Jacket
 			}
 
 			// フルパスを取ってくる
-			string sMp3File  = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
+			string sMp3File = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
 
 			// mp3の画像でパネルを更新する
 			entryJacket( sMp3File );
@@ -187,7 +187,6 @@ namespace MP3Jacket
 		/// <param name="e"></param>
 		private void panelJacket_Paint( object sender, PaintEventArgs e )
 		{
-			Graphics g = panelJacket.CreateGraphics();
 			e.Graphics.Clear( Color.Black );
 
 			if( imageJacket != null )
@@ -238,7 +237,7 @@ namespace MP3Jacket
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void panelJacket_DragDrop( object sender, DragEventArgs e )
+		private async void panelJacket_DragDrop( object sender, DragEventArgs e )
 		{
 			// 何も選択されていなかったら戻る
 			if( listBoxMp3.SelectedIndex == -1 )
@@ -249,12 +248,6 @@ namespace MP3Jacket
 			// ドロップされたデータがFileDrop型か調べる
 			if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
 			{
-				////ドロップされたデータがstring型か調べる
-				//if( !e.Data.GetDataPresent( DataFormats.FileDrop ) )
-				//{
-				//	return;
-				//}
-
 				//ドロップされたデータ(string型)を取得
 				string[] itemText = (string[])e.Data.GetData( DataFormats.FileDrop );
 
@@ -316,11 +309,73 @@ namespace MP3Jacket
 			{
 				//ドロップされたデータ(string型)を取得
 				string itemText = (string)e.Data.GetData( DataFormats.Html );
-				MessageBox.Show( "HTML ファイルはドロップできません", "エラー",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information,
-					MessageBoxDefaultButton.Button1,
-					MessageBoxOptions.DefaultDesktopOnly );
+
+				string keyword = " src=\"";
+				var nStart = itemText.IndexOf( keyword ) + keyword.Length;
+				var nEnd = itemText.IndexOf( "\"", nStart );
+
+				var url = itemText.Substring( nStart, nEnd - nStart );
+
+				var fileNameLength = url.IndexOf( "?" );
+
+				string urlFileName;
+				if( fileNameLength != -1 )
+				{
+					urlFileName = url.Substring( 0, fileNameLength );
+				}
+				else
+					urlFileName = url;
+
+				var ext = Path.GetExtension( urlFileName );
+
+				string sTempFile = Path.GetTempFileName();
+				sTempFile = Path.GetDirectoryName( sTempFile ) + "\\" + Path.GetFileNameWithoutExtension( sTempFile )
+				//				+ ext;
+				+ ".jpg";
+
+				////////////////////////////////
+				/// Google や Yahoo の画像検索から画像をドロップすると HTML でやってくるが、
+				/// その中の img src をダウンロードするとサーバーエラー 500 が返ってくる。
+				/// 通常のホムペにある画像をダウンロードすることはできる。
+				/// 下記の URL をブラウザにコピペすると画像が表示できるが、プログラムを介してでは出来ない。
+				System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+				HttpClient client = new HttpClient();
+				HttpResponseMessage response = await client.GetAsync( "https://msp.c.yimg.jp/images/v2/FUTi93tXq405grZVGgDqG-RgN5JIUCdQjFoEMeQCBn_2y4s4MG7-R93kq0tugs_qauDb4TH5d1EVOH-2d-broMB7DZ4_ZsZjzbE5hYD4GJpcIPBXswvkzZP6nb_nVFmS8GCTHUZ1_hp8ER83kbeZTQ8LClglCcHfuhtzHDNYUik_OEjCtV5Z4zHduOKRLEft-Vm8skDJinCSFhNn52AghA==/artworks-000020692533-nhdqra-t500x500.jpg" );
+				using( var fs = new FileStream( sTempFile, FileMode.CreateNew ) )
+				{
+					await response.Content.CopyToAsync( fs );
+				}
+				////////////////////////////////
+
+				string sMp3File = null;
+				foreach( int i in listBoxMp3.SelectedIndices )
+				{
+					sMp3File = arrayMp3[ i ] as string;
+					try
+					{
+						TestSub( sMp3File, sTempFile );
+					}
+					catch( Exception ex )
+					{
+						Debug.WriteLine( ex.Message );
+					}
+				}
+
+				// 最後だけ選ばれている状態にする
+				listBoxMp3.SelectedIndex = listBoxMp3.SelectedIndices[ listBoxMp3.SelectedIndices.Count - 1 ];
+
+				entryJacket( sMp3File );
+
+				try
+				{
+					File.Delete( sTempFile );
+				}
+				catch( Exception ex )
+				{
+					Debug.WriteLine( ex.Message );
+				}
+
 				return;
 			}
 			if( e.Data.GetDataPresent( DataFormats.Dib ) )
@@ -470,7 +525,7 @@ namespace MP3Jacket
 			// "&" ではそこで検索語句が切られてしまう
 			sSearchKey = sSearchKey.Replace( "&", "and" );
 
-//			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
+			//			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
 			string encUrl = "https://search.yahoo.co.jp/image/search?ei=UTF-8&fr=sfp_as&aq=-1&oq=&ts=1688&p=" + HttpUtility.UrlEncode( sSearchKey ) + "&meta=vc%3D";
 
 			openNewTabPage( encUrl );
@@ -515,7 +570,7 @@ namespace MP3Jacket
 		private void listBoxMp3_DoubleClick( object sender, EventArgs e )
 		{
 			// フルパスを取ってくる
-			string sMp3File  = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
+			string sMp3File = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
 
 			// mp3 ファイルをテンポラリフォルダにコピーして再生
 			string playFile = Path.GetTempPath() + Path.GetFileName( sMp3File );
@@ -588,7 +643,7 @@ namespace MP3Jacket
 			File.Delete( tempName );
 		}
 
-		private void bImageEdit_Click( object sender, EventArgs e )
+		private void ImageEdit_Click( object sender, EventArgs e )
 		{
 			// 何も選ばれていなければ逃げる
 			if( listBoxMp3.SelectedIndex == -1 )
@@ -598,7 +653,7 @@ namespace MP3Jacket
 			}
 
 			// フルパスを取ってくる
-			string sMp3File  = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
+			string sMp3File = arrayMp3[ listBoxMp3.SelectedIndex ] as string;
 
 			// テンポラリフォルダ＋テンポラリJpeg名
 			string tempName = Path.GetTempFileName();
@@ -626,7 +681,7 @@ namespace MP3Jacket
 			File.Delete( tempJpeg );
 		}
 
-		private void bResize_Click( object sender, EventArgs e )
+		private void Resize_Click( object sender, EventArgs e )
 		{
 			var fbd = new FolderBrowserDialog();
 			if( fbd.ShowDialog( this ) == DialogResult.OK )
@@ -667,10 +722,7 @@ namespace MP3Jacket
 			////			System.Diagnostics.Process.Start( "IExplore", url );
 
 			var chromePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
-			var p = Process.Start( chromePath, url );
-
-
-			System.Diagnostics.Process.Start( url );
+			Process.Start( chromePath, url );
 		}
 
 		private void fileToolStripMenuItem_Click( object sender, EventArgs e )

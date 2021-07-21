@@ -117,7 +117,7 @@
 			this.bImageEdit.TabIndex = 10;
 			this.bImageEdit.Text = "ImageEdit";
 			this.bImageEdit.UseVisualStyleBackColor = true;
-			this.bImageEdit.Click += new System.EventHandler(this.bImageEdit_Click);
+			this.bImageEdit.Click += new System.EventHandler(this.ImageEdit_Click);
 			// 
 			// bResize
 			// 
@@ -128,7 +128,7 @@
 			this.bResize.TabIndex = 10;
 			this.bResize.Text = "Resize";
 			this.bResize.UseVisualStyleBackColor = true;
-			this.bResize.Click += new System.EventHandler(this.bResize_Click);
+			this.bResize.Click += new System.EventHandler(this.Resize_Click);
 			// 
 			// menuStrip1
 			// 
