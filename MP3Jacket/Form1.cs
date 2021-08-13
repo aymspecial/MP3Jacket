@@ -14,6 +14,7 @@ using System.Windows.Forms;
 
 namespace MP3Jacket
 {
+
 	/// <summary>
 	/// デフォルトForm1クラス
 	/// </summary>
