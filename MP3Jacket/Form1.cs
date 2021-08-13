@@ -326,6 +326,8 @@ namespace MP3Jacket
 				else
 					urlFileName = url;
 
+				urlFileName = System.Net.WebUtility.UrlEncode( urlFileName );
+
 				var ext = Path.GetExtension( urlFileName );
 
 				string sTempFile = Path.GetTempFileName();
@@ -341,7 +343,7 @@ namespace MP3Jacket
 				System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
 				HttpClient client = new HttpClient();
-				HttpResponseMessage response = await client.GetAsync( "https://msp.c.yimg.jp/images/v2/FUTi93tXq405grZVGgDqG-RgN5JIUCdQjFoEMeQCBn_2y4s4MG7-R93kq0tugs_qauDb4TH5d1EVOH-2d-broMB7DZ4_ZsZjzbE5hYD4GJpcIPBXswvkzZP6nb_nVFmS8GCTHUZ1_hp8ER83kbeZTQ8LClglCcHfuhtzHDNYUik_OEjCtV5Z4zHduOKRLEft-Vm8skDJinCSFhNn52AghA==/artworks-000020692533-nhdqra-t500x500.jpg" );
+				HttpResponseMessage response = await client.GetAsync( urlFileName );
 				using( var fs = new FileStream( sTempFile, FileMode.CreateNew ) )
 				{
 					await response.Content.CopyToAsync( fs );
