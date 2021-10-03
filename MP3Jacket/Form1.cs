@@ -536,8 +536,8 @@ namespace MP3Jacket
 			// "&" ではそこで検索語句が切られてしまう
 			sSearchKey = sSearchKey.Replace( "&", "and" );
 
-			//			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
-			string encUrl = "https://search.yahoo.co.jp/image/search?ei=UTF-8&fr=sfp_as&aq=-1&oq=&ts=1688&p=" + HttpUtility.UrlEncode( sSearchKey ) + "&meta=vc%3D";
+			string encUrl = "http://www.google.co.jp/images?q=" + HttpUtility.UrlEncode( sSearchKey );
+			// string encUrl = "https://search.yahoo.co.jp/image/search?ei=UTF-8&fr=sfp_as&aq=-1&oq=&ts=1688&p=" + HttpUtility.UrlEncode( sSearchKey ) + "&meta=vc%3D";
 
 			openNewTabPage( encUrl );
 		}
