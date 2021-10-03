@@ -76,6 +76,7 @@ namespace MP3Jacket
 		/// <param name="e"></param>
 		private void listBoxMp3_DragDrop( object sender, DragEventArgs e )
 		{
+			IsAdministrator();
 			//ドロップされたデータがstring型か調べる
 			if( !e.Data.GetDataPresent( DataFormats.FileDrop ) )
 			{
@@ -110,6 +111,12 @@ namespace MP3Jacket
 			{
 				listBoxMp3.Items.Add( Path.GetFileName( fname ) );
 			}
+		}
+		private bool IsAdministrator()
+		{
+			var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+			var principal = new System.Security.Principal.WindowsPrincipal( identity );
+			return principal.IsInRole( System.Security.Principal.WindowsBuiltInRole.Administrator );
 		}
 
 		/// <summary>
@@ -344,7 +351,8 @@ namespace MP3Jacket
 				System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
 				HttpClient client = new HttpClient();
-				HttpResponseMessage response = await client.GetAsync( urlFileName );
+				var sUrl = System.Web.HttpUtility.UrlDecode( urlFileName );
+				HttpResponseMessage response = await client.GetAsync( url );
 				using( var fs = new FileStream( sTempFile, FileMode.CreateNew ) )
 				{
 					await response.Content.CopyToAsync( fs );
