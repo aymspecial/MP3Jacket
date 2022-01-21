@@ -203,28 +203,28 @@ namespace MP3Jacket
 		[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1 )]
 		private class BITMAPFILEHEADER
 		{
-			[MarshalAs( UnmanagedType.ByValArray, SizeConst=2)]
-			public Char[]   Type;
-			public Int32    Size;
-			public Int16    reserved1;
-			public Int16    reserved2;
-			public Int32    OffBits;
+			[MarshalAs( UnmanagedType.ByValArray, SizeConst = 2 )]
+			public Char[] Type;
+			public Int32 Size;
+			public Int16 reserved1;
+			public Int16 reserved2;
+			public Int32 OffBits;
 		}
 
 		[StructLayout( LayoutKind.Sequential, Pack = 2 )]
 		private class BITMAPINFOHEADER
 		{
-			public int      biSize;
-			public int      biWidth;
-			public int      biHeight;
-			public short    biPlanes;
-			public short    biBitCount;
-			public int      biCompression;
-			public int      biSizeImage;
-			public int      biXPelsPerMeter;
-			public int      biYPelsPerMeter;
-			public int      biClrUsed;
-			public int      biClrImportant;
+			public int biSize;
+			public int biWidth;
+			public int biHeight;
+			public short biPlanes;
+			public short biBitCount;
+			public int biCompression;
+			public int biSizeImage;
+			public int biXPelsPerMeter;
+			public int biYPelsPerMeter;
+			public int biClrUsed;
+			public int biClrImportant;
 		}
 
 		[DllImport( "gdi32.dll", ExactSpelling = true )]
